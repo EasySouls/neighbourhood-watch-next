@@ -8,5 +8,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  mather: ['/profile', '/dashboard'],
+  matcher: ['/profile', '/dashboard'],
 };
