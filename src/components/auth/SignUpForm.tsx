@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '../ui/input';
 import { signUpSchema } from '@/types/schemas';
 import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 export default function SignUpForm() {
   const form = useForm<z.infer<typeof signUpSchema>>({
@@ -30,17 +31,25 @@ export default function SignUpForm() {
     },
   });
   const { toast } = useToast();
+  const router = useRouter();
 
   async function onSubmit(data: z.infer<typeof signUpSchema>) {
     try {
-      const res = await api.post('/identity/register', data);
-      console.log(res);
+      await api.post('/identity/register', data);
+
+      toast({
+        title: 'Sikeres regisztráció',
+        description: 'Sikeresen regisztráltál, most már bejelentkezhetsz',
+      });
+
+      router.replace('/login');
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const signUpErrors = (error as any).response.data.errors;
       const errorMessages = Object.keys(signUpErrors)
         .map((key) => `${signUpErrors[key]}`)
         .join(', ');
+
       toast({
         title: 'Hiba történt a regisztráció során',
         description: errorMessages,
