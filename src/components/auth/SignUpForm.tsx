@@ -1,8 +1,9 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+
 import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import api from '@/lib/api';
 import {
   Form,
@@ -14,23 +15,12 @@ import {
 } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { Input } from '../ui/input';
-
-const formSchema = z.object({
-  firstName: z.string().min(2, { message: 'First name is required' }),
-  lastName: z.string().min(2, { message: 'Last name is required' }),
-  email: z.string().email({ message: 'Invalid email address' }),
-  password: z
-    .string()
-    .min(8, { message: 'Password must be at least 8 characters long' })
-    .max(25, { message: 'Password must be less than 25 characters long' }),
-  confirmPassword: z.string().refine((data) => data === '', {
-    message: 'Passwords do not match',
-  }),
-});
+import { signUpSchema } from '@/types/schemas';
+import { useToast } from '@/hooks/use-toast';
 
 export default function SignUpForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -39,18 +29,28 @@ export default function SignUpForm() {
       confirmPassword: '',
     },
   });
+  const { toast } = useToast();
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof signUpSchema>) {
     try {
-      await api.post('/identity/register', data);
+      const res = await api.post('/identity/register', data);
+      console.log(res);
     } catch (error) {
-      console.error(error);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const signUpErrors = (error as any).response.data.errors;
+      const errorMessages = Object.keys(signUpErrors)
+        .map((key) => `${signUpErrors[key]}`)
+        .join(', ');
+      toast({
+        title: 'Hiba történt a regisztráció során',
+        description: errorMessages,
+      });
     }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4 w-full'>
         <FormField
           control={form.control}
           name='firstName'

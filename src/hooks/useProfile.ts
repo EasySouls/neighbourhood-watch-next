@@ -7,5 +7,7 @@ export default function useProfile(): {
   isLoading: boolean;
   error: unknown;
 } {
-  return useSwr<User>(`/auth/me`, axiosGetFetcher);
+  return useSwr<User>(`/auth/me`, axiosGetFetcher, {
+    shouldRetryOnError: false,
+  });
 }

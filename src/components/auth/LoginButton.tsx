@@ -1,5 +1,7 @@
+'use client';
+
 import useProfile from '@/hooks/useProfile';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Button } from '../ui/button';
 import { FiLogIn } from 'react-icons/fi';
 
@@ -29,10 +31,7 @@ export default function LoginButton() {
       )}
 
       {!user && (
-        <Button
-          onClick={handleNavigateToLogin}
-          className='bg-white text-primary'
-        >
+        <Button onClick={handleNavigateToLogin}>
           Bejelentkezés
           <FiLogIn />
         </Button>

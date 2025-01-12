@@ -6,3 +6,10 @@ export interface User {
   avatar: string;
   role: string;
 }
+
+export interface LoginResponse {
+  tokenType: string;
+  accessToken: string;
+  expiresIn: number;
+  refreshToken: string;
+}
