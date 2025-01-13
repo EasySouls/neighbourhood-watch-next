@@ -1,36 +1,32 @@
 import { render, screen } from '@testing-library/react';
 import Header from '@/components/Header';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { afterEach } from 'node:test';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+
+vi.mock('next/navigation', async () => {
+  const actual = await vi.importActual('next/navigation');
+  return {
+    ...actual,
+    useRouter: vi.fn(() => ({
+      push: vi.fn(),
+      replace: vi.fn(),
+    })),
+    useSearchParams: vi.fn(() => ({
+      // get: vi.fn(),
+    })),
+    usePathname: vi.fn(),
+  };
+});
+vi.mock('/hooks/useProfile', async () => ({
+  data: {
+    user: {
+      name: 'Test User',
+    },
+  },
+}));
 
 describe('Header', () => {
-  beforeEach(() => {
-    vi.resetModules();
-    vi.mock('next/navigation', async () => {
-      const actual = await vi.importActual('next/navigation');
-      return {
-        ...actual,
-        useRouter: vi.fn(() => ({
-          push: vi.fn(),
-          replace: vi.fn(),
-        })),
-        useSearchParams: vi.fn(() => ({
-          // get: vi.fn(),
-        })),
-        usePathname: vi.fn(),
-      };
-    });
-    vi.mock('/hooks/useProfile', async () => ({
-      data: {
-        user: {
-          name: 'Test User',
-        },
-      },
-    }));
-  });
-
   afterEach(() => {
-    vi.resetAllMocks();
+    vi.clearAllMocks();
   });
 
   it('displays the correct title', () => {
