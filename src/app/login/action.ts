@@ -2,17 +2,20 @@
 
 import api from '@/lib/api';
 import { LoginResponse } from '@/types';
+import { LoginState } from '@/types/actionTypes';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 
-export async function handleLogin(formData: FormData) {
+export async function handleLogin(
+  prevState: LoginState,
+  formData: FormData
+): Promise<LoginState> {
   const loginData = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
   };
 
   if (!loginData.email || !loginData.password) {
-    return;
+    return { status: 'error', message: 'Hiányzó adatok' };
   }
 
   try {
@@ -22,19 +25,20 @@ export async function handleLogin(formData: FormData) {
     if (res.status === 200) {
       const loginRes = res.data as LoginResponse;
       if (!loginRes.accessToken) {
-        return;
+        return { status: 'error', message: 'Hibás adatok' };
       }
 
       console.log(loginRes);
 
       const cookieStore = await cookies();
       cookieStore.set('token', loginRes.accessToken);
+
+      return { status: 'success' };
     }
   } catch (e) {
     console.error(e);
-    return;
+    return { status: 'error', message: 'Hiba történt' };
   }
 
-  // Redirecting inside the try-catch throws an error
-  redirect('/dashboard');
+  return { status: 'error', message: 'Ismeretlen hiba' };
 }
