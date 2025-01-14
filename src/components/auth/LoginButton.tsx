@@ -4,9 +4,19 @@ import useProfile from '@/hooks/useProfile';
 import { useRouter } from 'next/navigation';
 import { Button } from '../ui/button';
 import { FiLogIn } from 'react-icons/fi';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { signOut } from '@/lib/actions';
 
 export default function LoginButton() {
-  const { data: user } = useProfile();
+  const { data: user, mutate } = useProfile();
   const router = useRouter();
 
   function handleNavigateToProfile() {
@@ -17,17 +27,35 @@ export default function LoginButton() {
     router.push('/login');
   }
 
+  async function handleSignOut() {
+    await signOut();
+    await mutate(undefined);
+    router.replace('/login');
+  }
+
   return (
     <>
       {user && (
-        <div className='flex items-center gap-2 h-full justify-center'>
-          <Button
-            onClick={handleNavigateToProfile}
-            className='bg-white text-primary'
-          >
-            Profil
-          </Button>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Avatar>
+              <AvatarImage src={user.avatar} alt={user.email} />
+              <AvatarFallback className='text-primary text-2xl uppercase'>
+                {user.email[0]}
+              </AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end'>
+            <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleNavigateToProfile}>
+              Profil
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleSignOut}>
+              Kijelentkezés
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
 
       {!user && (

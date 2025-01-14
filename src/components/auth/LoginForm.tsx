@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useActionState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoginState } from '@/types/actionTypes';
+import { useSWRConfig } from 'swr';
 
 export default function LoginForm({
   handleLoginAction,
@@ -18,12 +19,15 @@ export default function LoginForm({
     status: 'idle',
   });
   const router = useRouter();
+  const { mutate } = useSWRConfig();
 
   useEffect(() => {
     if (formState.status === 'success') {
+      // This revalidates the user profile data
+      mutate('/auth/me');
       router.push('/dashboard');
     }
-  }, [formState, router]);
+  }, [formState, router, mutate]);
 
   return (
     <form

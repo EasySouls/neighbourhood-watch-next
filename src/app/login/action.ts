@@ -3,7 +3,10 @@
 import api from '@/lib/api';
 import { LoginResponse } from '@/types';
 import { LoginState } from '@/types/actionTypes';
+import { AxiosError } from 'axios';
 import { cookies } from 'next/headers';
+
+const invalidLoginDataMsg = 'Hibás email-cím vagy jelszó';
 
 /**
  * Handles the login process by sending the provided form data to the login API endpoint.
@@ -39,10 +42,8 @@ export async function handleLogin(
     if (res.status === 200) {
       const loginRes = res.data as LoginResponse;
       if (!loginRes.accessToken) {
-        return { status: 'error', message: 'Hibás adatok' };
+        return { status: 'error', message: invalidLoginDataMsg };
       }
-
-      console.log(loginRes);
 
       const cookieStore = await cookies();
       cookieStore.set('token', loginRes.accessToken);
@@ -50,9 +51,14 @@ export async function handleLogin(
       return { status: 'success' };
     }
   } catch (e) {
+    if (e instanceof AxiosError) {
+      if (e.response?.status === 401) {
+        return { status: 'error', message: invalidLoginDataMsg };
+      }
+    }
     console.error(e);
-    return { status: 'error', message: 'Hiba történt' };
+    return { status: 'error', message: invalidLoginDataMsg };
   }
 
-  return { status: 'error', message: 'Ismeretlen hiba' };
+  return { status: 'error', message: 'Ismeretlen hiba történt' };
 }
