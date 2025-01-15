@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
   experimental: {
     ppr: 'incremental',
   },
+  webpack(config, { dev }) {
+    if (dev) {
+      config.devtool = 'source-map';
+    }
+    return config;
+  },
 };
 
 export default withSentryConfig(nextConfig, {
