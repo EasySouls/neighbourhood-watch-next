@@ -1,5 +1,8 @@
+import MillionLint from '@million/lint';
 import { withSentryConfig } from '@sentry/nextjs';
 import type { NextConfig } from 'next';
+
+const isCIEnv = process.env.CI;
 
 const nextConfig: NextConfig = {
   experimental: {
@@ -13,7 +16,12 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withSentryConfig(nextConfig, {
+const configWithWillionLint = MillionLint.next({
+  enabled: true,
+  rsc: true,
+})(nextConfig);
+
+export default withSentryConfig(configWithWillionLint, {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 
@@ -21,7 +29,7 @@ export default withSentryConfig(nextConfig, {
   project: 'neighbourhood-watch-next',
 
   // Only print logs for uploading source maps in CI
-  silent: !process.env.CI,
+  silent: !isCIEnv,
 
   // For all available options, see:
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
@@ -41,7 +49,7 @@ export default withSentryConfig(nextConfig, {
   // tunnelRoute: "/monitoring",
 
   // Hides source maps from generated client bundles
-  hideSourceMaps: true,
+  hideSourceMaps: false,
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   disableLogger: true,
