@@ -1,6 +1,6 @@
 import { handleLogin } from './action';
 import Link from 'next/link';
-import LoginForm from '@/components/auth/LoginForm';
+import LoginForm from '@/components/auth/login-form';
 
 export default async function LoginPage() {
   return (

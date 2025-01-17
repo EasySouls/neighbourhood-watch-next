@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import LoginButton from './auth/LoginButton';
+import LoginButton from './auth/login-button';
 
 export const experimental_ppr = true;
 

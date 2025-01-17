@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import Header from '@/components/Header';
+import Header from '@/components/header';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 
 vi.mock('next/navigation', async () => {
