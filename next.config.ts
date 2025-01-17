@@ -1,8 +1,8 @@
-import MillionLint from '@million/lint';
 import { withSentryConfig } from '@sentry/nextjs';
 import type { NextConfig } from 'next';
 
-const isCIEnv = process.env.CI;
+// const isCIEnv = process.env.CI;
+const isCIEnv = false;
 
 const nextConfig: NextConfig = {
   experimental: {
@@ -16,12 +16,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-const configWithWillionLint = MillionLint.next({
-  enabled: true,
-  rsc: true,
-})(nextConfig);
-
-export default withSentryConfig(configWithWillionLint, {
+export default withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 

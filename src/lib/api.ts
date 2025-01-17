@@ -9,10 +9,12 @@ if (process.env.NODE_ENV === 'development') {
   rejectUnauthorized = false;
 }
 
+const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 const httpAgent = new https.Agent({ rejectUnauthorized: rejectUnauthorized });
 
 const api = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`,
+  baseURL: `${baseUrl}/api`,
   headers: {
     'Content-Type': 'application/json',
   },
