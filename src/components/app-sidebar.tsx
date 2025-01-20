@@ -1,4 +1,4 @@
-import { Cog, Home, LucideIcon, User } from 'lucide-react';
+import { Cog, Home, LucideIcon, Shield, User } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -23,13 +23,14 @@ const items: SidebarItem[] = [
   { title: 'Home', url: '/', icon: Home },
   { title: 'Profile', url: '/profile', icon: User },
   { title: 'Settings', url: '/settings', icon: Cog },
+  { title: 'Duties', url: '/dashboard/duties', icon: Shield },
 ];
 
 export default function AppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible='icon' {...props}>
+    <Sidebar collapsible='icon' className='top-[--header-height]' {...props}>
       <SidebarContent className='flex flex-col justify-between'>
         <SidebarGroup>
           <SidebarGroupLabel>Neighbourhood Watch</SidebarGroupLabel>
