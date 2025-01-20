@@ -12,7 +12,7 @@ export default function AuthenticatedLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main>
+      <main className='h-full'>
         <SidebarTrigger />
         {children}
       </main>

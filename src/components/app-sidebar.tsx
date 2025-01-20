@@ -2,15 +2,16 @@ import { Cog, Home, LucideIcon, User } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarRail,
 } from './ui/sidebar';
 import Link from 'next/link';
+import React from 'react';
 
 type SidebarItem = {
   title: string;
@@ -24,10 +25,12 @@ const items: SidebarItem[] = [
   { title: 'Settings', url: '/settings', icon: Cog },
 ];
 
-export default function AppSidebar() {
+export default function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar>
-      <SidebarContent>
+    <Sidebar collapsible='icon' {...props}>
+      <SidebarContent className='flex flex-col justify-between'>
         <SidebarGroup>
           <SidebarGroupLabel>Neighbourhood Watch</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -47,7 +50,7 @@ export default function AppSidebar() {
         </SidebarGroup>
         <SidebarGroup />
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarRail />
     </Sidebar>
   );
 }

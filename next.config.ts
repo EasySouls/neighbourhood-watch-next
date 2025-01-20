@@ -7,8 +7,8 @@ const isCIEnv = false;
 const nextConfig: NextConfig = {
   experimental: {
     ppr: 'incremental',
-    dynamicIO: true,
-    authInterrupts: false,
+    dynamicIO: false,
+    authInterrupts: true,
   },
   webpack(config, { dev }) {
     if (dev) {
