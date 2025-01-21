@@ -5,7 +5,7 @@ export const experimental_ppr = true;
 
 export default function Header() {
   return (
-    <header className='bg-blue-900 text-white h-[--header-height] text-center p-4 flex justify-between items-center]'>
+    <header className='bg-blue-900 text-white h-[--header-height] text-center p-4 flex justify-between items-center'>
       <Link href='/' passHref>
         <h1 className='text-lg lg:text-xl xl:text-2xl'>Neighbourhood Watch</h1>
       </Link>
