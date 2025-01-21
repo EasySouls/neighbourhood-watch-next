@@ -1,21 +1,21 @@
 import { withSentryConfig } from '@sentry/nextjs';
 import type { NextConfig } from 'next';
 
-// const isCIEnv = process.env.CI;
-const isCIEnv = false;
+const isCIEnv = process.env.CI === 'true';
 
 const nextConfig: NextConfig = {
   experimental: {
     ppr: 'incremental',
     dynamicIO: false,
     authInterrupts: true,
+    turbo: {},
   },
-  webpack(config, { dev }) {
-    if (dev) {
-      config.devtool = 'source-map';
-    }
-    return config;
-  },
+  // webpack(config, { dev }) {
+  //   if (dev) {
+  //     config.devtool = 'source-map';
+  //   }
+  //   return config;
+  // },
 };
 
 export default withSentryConfig(nextConfig, {
@@ -56,4 +56,12 @@ export default withSentryConfig(nextConfig, {
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
+
+  // Automatically add release and environment to Sentry events
+  // release: {}
+
+  // We should not upload source maps in CI
+  sourcemaps: {
+    deleteSourcemapsAfterUpload: isCIEnv,
+  },
 });
