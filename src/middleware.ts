@@ -6,6 +6,7 @@ const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get('token');
+  console.log('Token in request: ' + token?.value);
   if (!token) {
     Sentry.setUser(null);
     return NextResponse.redirect(new URL('/login', request.nextUrl));
@@ -13,9 +14,10 @@ export async function middleware(request: NextRequest) {
 
   const res = await fetch(`${baseUrl}/api/auth/me`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token.value}`,
     },
   });
+  console.log(res.status);
 
   if (res.status !== 200) {
     Sentry.setUser(null);
