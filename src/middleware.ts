@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import api from '@/lib/api';
 import { User } from './types';
 import * as Sentry from '@sentry/nextjs';
+
+const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get('token');
@@ -9,12 +10,20 @@ export async function middleware(request: NextRequest) {
     Sentry.setUser(null);
     return NextResponse.redirect(new URL('/login', request.nextUrl));
   }
-  const res = await api.get('/auth/me');
+
+  const res = await fetch(`${baseUrl}/api/auth/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
   if (res.status !== 200) {
     Sentry.setUser(null);
     return NextResponse.redirect(new URL('/login', request.nextUrl));
   }
-  const user = res.data as User;
+
+  const user = (await res.json()) as User;
+
   Sentry.setUser({
     id: user.email,
     email: user.email,
