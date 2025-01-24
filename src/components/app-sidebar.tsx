@@ -30,7 +30,7 @@ export default function AppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible='icon' className='top-[--header-height]' {...props}>
+    <Sidebar collapsible='icon' className='top-(--header-height)' {...props}>
       <SidebarContent className='flex flex-col justify-between'>
         <SidebarGroup>
           <SidebarGroupLabel>Neighbourhood Watch</SidebarGroupLabel>

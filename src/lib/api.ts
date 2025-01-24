@@ -4,8 +4,7 @@ import https from 'https';
 
 let rejectUnauthorized = true;
 
-if (process.env.NODE_ENV === 'development') {
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+if (process.env.NODE_TLS_REJECT_UNAUTHORIZED === '0') {
   rejectUnauthorized = false;
 }
 
